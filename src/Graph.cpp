@@ -302,49 +302,58 @@ Node *Graph::findNode(int searchId, int debugLevel)
 
 
 // TEST and TEST and Test some more!
+// I have tested starting with
+//
+//   (0,1)        Which is a single road directly connected to an intersection      Works!
+//   (1,1)        Which is an intersection                                          Works!
+//
 // (--)
-ResultSet *Graph::runDijkstra(Node *startNode, Node *endNode)
+ResultSet *Graph::runDijkstra(Node *startNode, Node *endNode, int debugLevel)
 {
 
-    int debugLevel = 1;
     std::string ind1 = "   ";
     std::string ind2 = "       ";
     std::string ind3 = "           ";
     std::string ind4 = "              ";
 
-
-
-    int minWorkLabel = INT_MAX;
+    int steps = 0;
+    int maxSteps = 400;
+    int done = false;
+    int lastOne = false;
 
     Node *workNode = nullptr;
-
     ResultSet *result = new ResultSet();
-
     BinarySearchTree *visitedNodes = new BinarySearchTree();
 
-    std::priority_queue<Node *, std::vector<Node *>, graphNodeCompare> workList;         // we need to have a prio queue to see which has the SHORTEST DISTANCE node (top prio!)
+    // We need a Priority Queue to see which has the lowest value tempLabel (shortest total distance as of now)
+    std::priority_queue<Node *, std::vector<Node *>, graphNodeCompare> workList;
 
 
 
 
 
 
+    /// FIXME, TODO: Run resetDijkstra for all Nodes
+    // resetAllNodes();
 
-    // FIXME, TODO: resetDijkstra for all Nodes()
 
 
     /// setup the first node
     startNode->permanentLabel = 0;
     startNode->fastestPrevNode = nullptr;
 
-
-    std::cout << "\n";
-    std::cout << ind1 << "Setup startNode\n" << ind1 << "------------------\n";
-    std::cout << ind2 << startNode->getName() << ", " << startNode->getId() << "\n";
-    std::cout << ind2 << "startNode.permanent=0\n";
-
+    if(debugLevel >=1) {
+        std::cout << "\n";
+        std::cout << ind1 << "Setup startNode\n" << ind1 << "------------------\n";
+        std::cout << ind2 << startNode->getName() << ", " << startNode->getId() << "\n";
+        std::cout << ind2 << "startNode.permanent=0\n";
+    }
 
     /// Which vertices can we reach from the start?
+
+
+    std::cout << startNode->getName() << "\n";
+    std::cout << startNode->getId() << "\n";
 
 
     if(startNode->up->to != nullptr) {
@@ -360,7 +369,11 @@ ResultSet *Graph::runDijkstra(Node *startNode, Node *endNode)
             std::cout << ind3 << "--> push up ( " << startNode->up->to->getName() << ", " << startNode->up->to->getId() << ")  tempLabel= " << startNode->up->to->tempLabel
             << ", fastestPrevNode= " << startNode->up->to->fastestPrevNode->getId() << "\n\n";
         }
+
+
+        std::cout << "push up ---> \n";
         workList.push(startNode->up->to);
+        std::cout << "empty: " << workList.empty() << "\n";
         visitedNodes->add(startNode->up->to->getId(),0);
 
     }
@@ -411,95 +424,26 @@ ResultSet *Graph::runDijkstra(Node *startNode, Node *endNode)
         visitedNodes->add(startNode->left->to->getId(),0);
     }
 
+
+    std::cout << "empty: " << workList.empty() << "\n";
+
     // startNode is now permanent
     visitedNodes->add(startNode->getId(), 0);
 
 
 
 
-/*
-    /// select the vertex with the smallest  temporary label and make its label permanent ...
-    std::cout << "\n\n";
-    std::cout << ind1 << "Find the node around the startNode with the smallest temporary label \n" << ind1 << "--------------------------\n"<< ind1<<"\n";
-
-    // First find the smallest temporary label
-    // (jörgen adds: And dont go to already visited nodes)
-
-
-    workNode = workList.top();
-    workList.pop();
-*/
-/*
-    minWorkLabel = INT_MAX;
-
-    if(startNode->up->to != nullptr) {
-
-        if(startNode->up->weight < minWorkLabel) {
-            minWorkLabel = startNode->up->weight;
-            workNode = startNode->up->to;
-            if(debugLevel >=1) { std::cout << ind2 << "workNode is now   startNode->up\n"; }
-            if(debugLevel >= 2) { std::cout << ind2 << "startNode->up has smallest weight. Updated minWorkLabel = " << minWorkLabel << "\n";}
-        }
-
-    }
-    if(startNode->right->to != nullptr) {
-
-
-        if(startNode->right->weight < minWorkLabel) {
-            minWorkLabel = startNode->right->weight;
-            workNode = startNode->right->to;
-            if(debugLevel >=1) { std::cout << ind2 << "workNode is now   startNode->right\n"; }
-            if(debugLevel >= 2) { std::cout << ind2 << "startNode->right has smallest weight. Updated minWorkLabel = " << minWorkLabel << "\n";}
-        }
-
-
-    }
-    if(startNode->down->to != nullptr) {
-
-        if(startNode->down->weight < minWorkLabel) {
-            minWorkLabel = startNode->down->weight;
-            workNode = startNode->down->to;
-            if(debugLevel >=1) { std::cout << ind2 << "workNode is now   startNode->down\n"; }
-            if(debugLevel >= 2) { std::cout << ind2 << "startNode->down has smallest weight. Updated minWorkLabel = " << minWorkLabel << "\n";}
-        }
-
-
-    }
-    if(startNode->left->to != nullptr) {
-
-        if(startNode->left->weight < minWorkLabel) {
-            minWorkLabel = startNode->left->weight;
-            workNode = startNode->left->to;
-            if(debugLevel >=1) { std::cout << ind2 << "workNode is now   startNode->left\n"; }
-            if(debugLevel >= 2) { std::cout << ind2 << "startNode->left) has smallest weight. Updated minWorkLabel = " << minWorkLabel << "\n"; }
-        }
-    }
-
-    */
-
-
-/*
-
-    /// ... make its label permanent
-
-    std::cout << ind2 << "workNode = (" << workNode->getName() << ", " << workNode->getId() << ")\n";
-
-
-    workNode->permanentLabel = workNode->tempLabel;
-    visitedNodes->add(workNode->getId(),0);   // Add to visited because this one is now permanent
-    std::cout << ind2 << "workNode.permanent=" << workNode->permanentLabel <<  "(" << workNode->getName() << ", " << workNode->getId() << ")\n";
-*/
-
-    int steps = 0;
-    int maxSteps = 400;
-    int done = false;
-    int lastOne = false;
-    minWorkLabel = INT_MAX;
 
 
 
 
 
+
+
+
+    steps = 0;
+    maxSteps = 400;
+    done = false;
 
     if(debugLevel >=1 ) {
         std::cout << "\n";
@@ -515,11 +459,16 @@ ResultSet *Graph::runDijkstra(Node *startNode, Node *endNode)
         /// make its label permanent (change worknode to this)
         ///
 
+        std::cout << "empty 1: " << workList.empty() << "\n";
+
+
         if(workList.empty()){
             std::cout << ind2 << "Worklist is empty, exiting loop\n" << ind1 << "}\n";
             done = true;
             break;
         }
+
+        std::cout << "empty 2: " << workList.empty() << "\n";
 
         if(debugLevel >= 2) {
 
@@ -546,12 +495,12 @@ ResultSet *Graph::runDijkstra(Node *startNode, Node *endNode)
 
         if(debugLevel >=1) {
             std::cout << ind2 << "workNode.permanent = " << workNode->tempLabel << " (" << workNode->getName() << ", " << workNode->getId() << ")\n";
-            std::cout << ind2 << "workNode.fastestPrevNode = " << workNode->fastestPrevNode->getId() << "\n";
+            std::cout << ind2 << "workNode.fastestPrevNode = " << workNode->fastestPrevNode->getId() << "\n\n";
         }
 
 
 
-        std::cout << "\n";
+
 
 
 
@@ -617,8 +566,10 @@ ResultSet *Graph::runDijkstra(Node *startNode, Node *endNode)
                             << ", fastestPrevNode= " << workNode->up->to->fastestPrevNode->getId() << "\n\n";
                     }
 
-                    workList.push(workNode->up->to);
-                    visitedNodes->add(workNode->up->to->getId(),0);
+                    if(debugLevel >=1) {
+                        workList.push(workNode->up->to);
+                        visitedNodes->add(workNode->up->to->getId(),0);
+                    }
                 }
 
 
@@ -663,10 +614,10 @@ ResultSet *Graph::runDijkstra(Node *startNode, Node *endNode)
                 if(visitedNodes->findVal(workNode->right->to->getId(),0) == -1)  {
 
                     // did not find it , push it to work list!
-
-                    std::cout << ind3 << "--> push right ( " << workNode->right->to->getName() << ", " << workNode->right->to->getId() << ")  tempLabel= " << workNode->right->to->tempLabel
+                    if(debugLevel >=1) {
+                        std::cout << ind3 << "--> push right ( " << workNode->right->to->getName() << ", " << workNode->right->to->getId() << ")  tempLabel= " << workNode->right->to->tempLabel
                             << ", fastestPrevNode= " << workNode->right->to->fastestPrevNode->getId() << "\n\n";
-
+                    }
 
 
                     workList.push(workNode->right->to);
@@ -717,9 +668,10 @@ ResultSet *Graph::runDijkstra(Node *startNode, Node *endNode)
                 if(visitedNodes->findVal(workNode->down->to->getId(),0) == -1)  {
 
                     // did not find it , push it to work list!
-
-                   std::cout << ind3 << "--> push down ( " << workNode->down->to->getName() << ", " << workNode->down->to->getId() << ")  tempLabel= " << workNode->down->to->tempLabel
+                    if(debugLevel >=1) {
+                        std::cout << ind3 << "--> push down ( " << workNode->down->to->getName() << ", " << workNode->down->to->getId() << ")  tempLabel= " << workNode->down->to->tempLabel
                             << ", fastestPrevNode= " << workNode->down->to->fastestPrevNode->getId() << "\n\n";
+                    }
 
                     workList.push(workNode->down->to);
                     visitedNodes->add(workNode->down->to->getId(),0);
@@ -764,8 +716,10 @@ ResultSet *Graph::runDijkstra(Node *startNode, Node *endNode)
                 if(visitedNodes->findVal(workNode->left->to->getId(),0) == -1)  {
 
                     // did not find it , push it to work list!
-                   std::cout << ind3 << "--> push left ( " << workNode->left->to->getName() << ", " << workNode->left->to->getId() << ")  tempLabel= " << workNode->left->to->tempLabel
+                    if(debugLevel >=1) {
+                        std::cout << ind3 << "--> push left ( " << workNode->left->to->getName() << ", " << workNode->left->to->getId() << ")  tempLabel= " << workNode->left->to->tempLabel
                             << ", fastestPrevNode= " << workNode->left->to->fastestPrevNode->getId() << "\n\n";
+                    }
 
 
                     workList.push(workNode->left->to);
@@ -815,39 +769,58 @@ ResultSet *Graph::runDijkstra(Node *startNode, Node *endNode)
     ///
 
     workNode = endNode;
-    std::cout << ind1 << "Result output\n";
-    std::cout << ind1 << "--------------------------\n";
+    if(debugLevel >=1 ){
+        std::cout << ind1 << "Result output\n";
+        std::cout << ind1 << "--------------------------\n";
+    }
+
 
 
     std::stack <int> outputs;
-    int weightTotal = 0;
-    std::cout << "\n\nGet the right weight!\n\n\n";
 
+    int nr = 0;
 
     while(workNode != nullptr) {
 
-            std::cout << workNode->getId() << " has fastestPrevNode= " << workNode->fastestPrevNode << "!\n";
+            std::cout << nr++ << "\n";
+
+            result->shortestPath.push(workNode);
+
+            std::cout << "A\n";
+
+            if(debugLevel >=2 ) {std::cout << workNode->getId() << " has fastestPrevNode= " << workNode->fastestPrevNode << "!\n"; }
+
+            std::cout << "B\n";
 
             outputs.push(workNode->getId());
 
-            // weightTotal += // FIXME TODO find out the link between these two nodes and get the weight in the link between them, also the direction matters
+            std::cout << "C\n";
 
             workNode = workNode->fastestPrevNode;
 
-            if(workNode->getId() == startNode->getId()) {
-                // add the last one
-                outputs.push(workNode->getId());
-                workNode = nullptr; // End search
+            std::cout << "D\n";
+
+
+
+            /// FIXME: här behövs det arbete efter jag sovit :3
+
+            if(workNode != nullptr) {
+                if(workNode->getId() == startNode->getId()) {
+
+                    std::cout << "E\n";
+                    // add the last one
+                    outputs.push(workNode->getId());
+                    std::cout << "F\n";
+                    result->shortestPath.push(workNode);
+                    std::cout << "G\n";
+                    workNode = nullptr; // End search
+                }
             }
-
     }
 
-
-
-    while(!outputs.empty()) {
-        std::cout << outputs.top() << " => " ;
-        outputs.pop();
-    }
+    // Store away the shortest distance
+    std::cout << "Z\n";
+    result->resultInt = endNode->permanentLabel;
 
     std::cout << "\n";
 

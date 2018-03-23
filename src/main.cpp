@@ -234,7 +234,24 @@ int main(int argc, char *argv[])
 
 
 
-    roads->runDijkstra(startNode, endNode);
+    /// CRASHES WHEN debugLevel = 0 !! some code is within debuglevel>=1{} blocks
+    ResultSet *dijkstraResult = roads->runDijkstra(startNode, endNode,0);
+
+    if(dijkstraResult->shortestPath.empty()) {
+        return 0;
+    }
+
+    std::cout << "The shortest distance is=" << dijkstraResult->resultInt << "\n";
+    std::cout << "The path is: \n    ";
+
+    // Look at the result
+    while( ! (dijkstraResult->shortestPath.empty()) )
+    {
+        std::cout << dijkstraResult->shortestPath.top()->getName() << " ===>  " ;
+        dijkstraResult->shortestPath.pop();
+
+    }
+    std::cout << "\n";
 
 
 

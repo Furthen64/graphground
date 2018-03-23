@@ -91,7 +91,7 @@ public:
     void addFirstNode(std::string _name, int _id);
     Node *findNode(int searchId, int debugLevel);
 
-    ResultSet *runDijkstra(Node *startNode, Node *endNode);
+    ResultSet *runDijkstra(Node *startNode, Node *endNode, int debugLevel);
 
 private:
 
