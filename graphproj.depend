@@ -1,0 +1,109 @@
+# depslib dependency file v1.0
+1521805207 source:c:\fat64\projects\graphproj\src\graph.cpp
+	"Graph.hpp"
+
+1521804412 source:c:\fat64\projects\graphproj\src\node.cpp
+	"Node.hpp"
+	"Link.hpp"
+
+1521487294 source:c:\fat64\projects\graphproj\src\link.cpp
+	"Link.hpp"
+
+1521486135 c:\fat64\projects\graphproj\src\link.hpp
+	<string>
+	<iostream>
+
+1521804122 source:c:\fat64\projects\graphproj\src\main.cpp
+	<iostream>
+	<sstream>
+	<queue>
+	<vector>
+	"BinarySearchTree.hpp"
+	"Graph.hpp"
+	"Vector2f.hpp"
+
+1521741815 c:\fat64\projects\graphproj\src\node.hpp
+	<string>
+	<iostream>
+	<climits>
+
+1521804411 c:\fat64\projects\graphproj\src\graph.hpp
+	<iostream>
+	<string>
+	<stack>
+	<queue>
+	"Node.hpp"
+	"Link.hpp"
+	"BinarySearchTree.hpp"
+	"HurkaMatrixV1.hpp"
+
+1521377715 source:c:\fat64\projects\graphproj\src\hurkamatrixv1.cpp
+	"HurkaMatrixV1.hpp"
+
+1521533348 c:\fat64\projects\graphproj\src\hurkamatrixv1.hpp
+	<iostream>
+	<string>
+
+1521543902 source:c:\fat64\projects\graphproj\src\binarysearchtree.cpp
+	"BinarySearchTree.hpp"
+
+1521541598 c:\fat64\projects\graphproj\src\binarysearchtree.hpp
+	<string>
+	<iostream>
+
+1521533668 c:\fat64\projects\graphproj\src\vector2f.hpp
+
+1521543902 source:c:\github\graphground\src\binarysearchtree.cpp
+	"BinarySearchTree.hpp"
+
+1521541598 c:\github\graphground\src\binarysearchtree.hpp
+	<string>
+	<iostream>
+
+1521805207 source:c:\github\graphground\src\graph.cpp
+	"Graph.hpp"
+
+1521804411 c:\github\graphground\src\graph.hpp
+	<iostream>
+	<string>
+	<stack>
+	<queue>
+	"Node.hpp"
+	"Link.hpp"
+	"BinarySearchTree.hpp"
+	"HurkaMatrixV1.hpp"
+
+1521741815 c:\github\graphground\src\node.hpp
+	<string>
+	<iostream>
+	<climits>
+
+1521486135 c:\github\graphground\src\link.hpp
+	<string>
+	<iostream>
+
+1521533348 c:\github\graphground\src\hurkamatrixv1.hpp
+	<iostream>
+	<string>
+
+1521377715 source:c:\github\graphground\src\hurkamatrixv1.cpp
+	"HurkaMatrixV1.hpp"
+
+1521487294 source:c:\github\graphground\src\link.cpp
+	"Link.hpp"
+
+1521805259 source:c:\github\graphground\src\main.cpp
+	<iostream>
+	<sstream>
+	<queue>
+	<vector>
+	"BinarySearchTree.hpp"
+	"Graph.hpp"
+	"Vector2f.hpp"
+
+1521533668 c:\github\graphground\src\vector2f.hpp
+
+1521804412 source:c:\github\graphground\src\node.cpp
+	"Node.hpp"
+	"Link.hpp"
+
