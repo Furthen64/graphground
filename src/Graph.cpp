@@ -352,9 +352,6 @@ ResultSet *Graph::runDijkstra(Node *startNode, Node *endNode, int debugLevel)
     /// Which vertices can we reach from the start?
 
 
-    std::cout << startNode->getName() << "\n";
-    std::cout << startNode->getId() << "\n";
-
 
     if(startNode->up->to != nullptr) {
 
@@ -371,9 +368,7 @@ ResultSet *Graph::runDijkstra(Node *startNode, Node *endNode, int debugLevel)
         }
 
 
-        std::cout << "push up ---> \n";
         workList.push(startNode->up->to);
-        std::cout << "empty: " << workList.empty() << "\n";
         visitedNodes->add(startNode->up->to->getId(),0);
 
     }
@@ -425,8 +420,6 @@ ResultSet *Graph::runDijkstra(Node *startNode, Node *endNode, int debugLevel)
     }
 
 
-    std::cout << "empty: " << workList.empty() << "\n";
-
     // startNode is now permanent
     visitedNodes->add(startNode->getId(), 0);
 
@@ -459,16 +452,15 @@ ResultSet *Graph::runDijkstra(Node *startNode, Node *endNode, int debugLevel)
         /// make its label permanent (change worknode to this)
         ///
 
-        std::cout << "empty 1: " << workList.empty() << "\n";
 
 
         if(workList.empty()){
-            std::cout << ind2 << "Worklist is empty, exiting loop\n" << ind1 << "}\n";
+            if(debugLevel >=1) {
+                std::cout << ind2 << "Worklist is empty, exiting loop\n" << ind1 << "}\n";
+            }
             done = true;
             break;
         }
-
-        std::cout << "empty 2: " << workList.empty() << "\n";
 
         if(debugLevel >= 2) {
 
@@ -566,10 +558,9 @@ ResultSet *Graph::runDijkstra(Node *startNode, Node *endNode, int debugLevel)
                             << ", fastestPrevNode= " << workNode->up->to->fastestPrevNode->getId() << "\n\n";
                     }
 
-                    if(debugLevel >=1) {
-                        workList.push(workNode->up->to);
-                        visitedNodes->add(workNode->up->to->getId(),0);
-                    }
+                    workList.push(workNode->up->to);
+                    visitedNodes->add(workNode->up->to->getId(),0);
+
                 }
 
 
@@ -775,55 +766,58 @@ ResultSet *Graph::runDijkstra(Node *startNode, Node *endNode, int debugLevel)
     }
 
 
+    workNode = endNode;
 
-    std::stack <int> outputs;
+    done = false;
 
-    int nr = 0;
+    // Go backwards from the endNode and push all the fastestPrevNodes until we reach the startNode
+    // Push to stack in the result
 
-    while(workNode != nullptr) {
+    while(!done) {
 
-            std::cout << nr++ << "\n";
-
-            result->shortestPath.push(workNode);
-
-            std::cout << "A\n";
-
-            if(debugLevel >=2 ) {std::cout << workNode->getId() << " has fastestPrevNode= " << workNode->fastestPrevNode << "!\n"; }
-
-            std::cout << "B\n";
-
-            outputs.push(workNode->getId());
-
-            std::cout << "C\n";
-
-            workNode = workNode->fastestPrevNode;
-
-            std::cout << "D\n";
+        result->shortestPath.push(workNode);
 
 
+        if(workNode == startNode) {
+            done = true;
+            break;
+        }
 
-            /// FIXME: här behövs det arbete efter jag sovit :3
-
-            if(workNode != nullptr) {
-                if(workNode->getId() == startNode->getId()) {
-
-                    std::cout << "E\n";
-                    // add the last one
-                    outputs.push(workNode->getId());
-                    std::cout << "F\n";
-                    result->shortestPath.push(workNode);
-                    std::cout << "G\n";
-                    workNode = nullptr; // End search
-                }
-            }
+        workNode = workNode->fastestPrevNode;
     }
 
-    // Store away the shortest distance
-    std::cout << "Z\n";
+    // Store the total fastest distance from start to end
     result->resultInt = endNode->permanentLabel;
 
     std::cout << "\n";
 
     return result;
+
+}
+
+
+// (--)
+void Graph::printPathFromDijkstra(ResultSet *dijkstraResult)
+{
+
+    Node *workNode;
+    std::string str;
+
+    // Look at the result
+    while( ! (dijkstraResult->shortestPath.empty()) )
+    {
+        workNode = dijkstraResult->shortestPath.top();
+
+        str = dijkstraResult->shortestPath.top()->getName();
+
+        dijkstraResult->shortestPath.pop();
+
+        if(! (dijkstraResult->shortestPath.empty())) {
+            std::cout << str << " ==> ";
+        } else {
+            std::cout << str << "\n";
+        }
+
+    }
 
 }

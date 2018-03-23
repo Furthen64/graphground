@@ -200,6 +200,7 @@ int main(int argc, char *argv[])
 
     // Setup a high weight on a link
     road12->right->weight = 5;
+    road11->left->weight = 5;
 
 
 
@@ -210,18 +211,19 @@ int main(int argc, char *argv[])
 
 
 
-    std::cout << "\n\n Running Dijkstra:\n";
+    std::cout << "\n\nRunning Dijkstra:\n---------------\n";
 
 
 
     // Setup start and end positions for Dijkstra
 
-    iso_pos.y = 3;
-    iso_pos.x = 1;
+
+    iso_pos.y = 1;
+    iso_pos.x = 4;
     Node *startNode = roads->findNode( generateID(iso_pos), 0);
 
     iso_pos.y = 1;
-    iso_pos.x = 2;
+    iso_pos.x = 3;
     Node *endNode   = roads->findNode ( generateID(iso_pos) , 0);
 
     if(startNode == nullptr || endNode == nullptr) {
@@ -229,8 +231,8 @@ int main(int argc, char *argv[])
         return 0;
     }
 
-    std::cout << " startNode.id=" << startNode->getId() << "\n";
-    std::cout << " endNode.id= " << endNode->getId() << "\n";
+    std::cout << "  * startNode.id=" << startNode->getId() << "\n";
+    std::cout << "  * endNode.id= " << endNode->getId() << "\n";
 
 
 
@@ -241,16 +243,12 @@ int main(int argc, char *argv[])
         return 0;
     }
 
+    std::cout << "\n";
     std::cout << "The shortest distance is=" << dijkstraResult->resultInt << "\n";
     std::cout << "The path is: \n    ";
 
-    // Look at the result
-    while( ! (dijkstraResult->shortestPath.empty()) )
-    {
-        std::cout << dijkstraResult->shortestPath.top()->getName() << " ===>  " ;
-        dijkstraResult->shortestPath.pop();
+    roads->printPathFromDijkstra(dijkstraResult);
 
-    }
     std::cout << "\n";
 
 

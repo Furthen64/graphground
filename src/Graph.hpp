@@ -93,6 +93,9 @@ public:
 
     ResultSet *runDijkstra(Node *startNode, Node *endNode, int debugLevel);
 
+    void printPathFromDijkstra(ResultSet *dijkstraResult);
+
+
 private:
 
     Node *head;
