@@ -60,10 +60,10 @@
 	<string>
 	<iostream>
 
-1521839786 source:c:\github\graphground\src\graph.cpp
+1521881271 source:c:\github\graphground\src\graph.cpp
 	"Graph.hpp"
 
-1521830432 c:\github\graphground\src\graph.hpp
+1521883753 c:\github\graphground\src\graph.hpp
 	<iostream>
 	<string>
 	<stack>
@@ -73,10 +73,11 @@
 	"BinarySearchTree.hpp"
 	"HurkaMatrixV1.hpp"
 
-1521741815 c:\github\graphground\src\node.hpp
+1521885940 c:\github\graphground\src\node.hpp
 	<string>
 	<iostream>
 	<climits>
+	"Vector2f.hpp"
 
 1521486135 c:\github\graphground\src\link.hpp
 	<string>
@@ -92,18 +93,17 @@
 1521487294 source:c:\github\graphground\src\link.cpp
 	"Link.hpp"
 
-1521830547 source:c:\github\graphground\src\main.cpp
+1521888437 source:c:\github\graphground\src\main.cpp
 	<iostream>
 	<sstream>
 	<queue>
 	<vector>
 	"BinarySearchTree.hpp"
 	"Graph.hpp"
-	"Vector2f.hpp"
 
-1521533668 c:\github\graphground\src\vector2f.hpp
+1521881477 c:\github\graphground\src\vector2f.hpp
 
-1521804412 source:c:\github\graphground\src\node.cpp
+1521885947 source:c:\github\graphground\src\node.cpp
 	"Node.hpp"
 	"Link.hpp"
 

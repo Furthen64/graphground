@@ -228,9 +228,9 @@ void Graph::dump(int debugLevel)
 
 
 // (--)
-void Graph::addFirstNode(std::string _name, int _id)
+void Graph::addFirstNode(std::string _name, int _id, Vector2f _iso_pos)
 {
-    head =  new Node(_name, _id);
+    head =  new Node(_name, _id, _iso_pos);
 }
 
 
@@ -287,25 +287,13 @@ Node *Graph::findNode(int searchId, int debugLevel)
 }
 
 
-
-/// Testa med 10001 och testa med 00001 de två första som headers. se om det fortfarande fungerar!!
-
-
-    /// Vore bra hitta på ngt scenario där man måste räkna om templabels på någon interesection i vägnätet!
-
-    /// Vore bra om Dijkstra slutade NÄR den har .permanentLabel= på EndNode ? matcha mot endnode vid permanent och gör en exit där
-
-
-    /// Detta måste göras i setup-steget också! Görs det?
- //Now work with the node you just made Permanent "workNode".
- //Put temporary labels on each node you can reach from this node.
-
-
-// TEST and TEST and Test some more!
 // I have tested starting with
 //
 //   (0,1)        Which is a single road directly connected to an intersection      Works!
 //   (1,1)        Which is an intersection                                          Works!
+//
+// Tested also from maany points to points in my road network, and it all seems to work
+//
 //
 // (--)
 ResultSet *Graph::runDijkstra(Node *startNode, Node *endNode, int debugLevel)
@@ -330,12 +318,8 @@ ResultSet *Graph::runDijkstra(Node *startNode, Node *endNode, int debugLevel)
 
 
 
-
-
-
     /// FIXME, TODO: Run resetDijkstra for all Nodes
     // resetAllNodes();
-
 
 
     /// setup the first node
@@ -566,7 +550,7 @@ ResultSet *Graph::runDijkstra(Node *startNode, Node *endNode, int debugLevel)
 
 
             } else {
-                if(debugLevel >=2) { std::cout << ind3 << "Already permanented: workNode->up->to\n"; }
+                if(debugLevel >=2) { std::cout << ind3 << "Already permanented: workNode->up      (" << workNode->up->to->getName() << ", .permanent= " << workNode->up->to->permanentLabel << " \n"; }
             }
         }
 
@@ -619,7 +603,7 @@ ResultSet *Graph::runDijkstra(Node *startNode, Node *endNode, int debugLevel)
 
 
             } else {
-                if(debugLevel >=2) { std::cout << ind3 << "Already permanented: workNode->right->to\n"; }
+                if(debugLevel >=2) { std::cout << ind3 << "Already permanented: workNode->right      (" << workNode->right->to->getName() << ", .permanent= " << workNode->right->to->permanentLabel << " \n"; }
             }
 
         }
@@ -669,7 +653,8 @@ ResultSet *Graph::runDijkstra(Node *startNode, Node *endNode, int debugLevel)
                 }
 
             } else {
-                if(debugLevel >=2) { std::cout << ind3 << "Already permanented: workNode->down->to\n"; }
+                if(debugLevel >=2) { std::cout << ind3 << "Already permanented: workNode->down      (" << workNode->down->to->getName() << ", .permanent= " << workNode->down->to->permanentLabel << " \n"; }
+
             }
 
 
@@ -719,7 +704,8 @@ ResultSet *Graph::runDijkstra(Node *startNode, Node *endNode, int debugLevel)
 
 
             } else {
-               if(debugLevel >=2) { std::cout << ind3 << "Already permanented: workNode->left->to\n"; }
+               if(debugLevel >=2) { std::cout << ind3 << "Already permanented: workNode->left         (" << workNode->left->to->getName() << ", .permanent= " << workNode->left->to->permanentLabel << " \n"; }
+
 
             }
 

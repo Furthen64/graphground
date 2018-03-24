@@ -6,6 +6,7 @@
 #include <stack>
 #include <queue>
 
+
 #include "Node.hpp"     // Important that Node is first! Only include Node here!
 #include "Link.hpp"
 
@@ -88,12 +89,18 @@ public:
 
 
 
-    void addFirstNode(std::string _name, int _id);
+    void addFirstNode(std::string _name, int _id, Vector2f _iso_pos);
     Node *findNode(int searchId, int debugLevel);
 
     ResultSet *runDijkstra(Node *startNode, Node *endNode, int debugLevel);
 
     void printPathFromDijkstra(ResultSet *dijkstraResult);
+
+
+
+
+
+
 
 
 private:

@@ -2,11 +2,17 @@
 #include <iostream>
 #include <climits>
 
+#include "Vector2f.hpp"
 
 class Link; // Forward declaration
 
 
-
+enum NODE_DIR {
+    dir_up,
+    dir_right,
+    dir_down,
+    dir_left
+};
 
 // A very HEAVY class
 // Its use with the Dijkstra algorithm makes it so that we need to overload the "<" operator
@@ -16,7 +22,7 @@ class Link; // Forward declaration
 class Node
 {
 public:
-    Node(std::string _name, int _id);
+    Node(std::string _name, int _id, Vector2f _iso_pos);
     void createLink();
 
     void attachNodeUp(Node *other);
@@ -24,17 +30,14 @@ public:
     void attachNodeDown(Node *other);
     void attachNodeLeft(Node *other);
 
-    Node *attachNewNodeUp(std::string _name, int _id);
-    Node *attachNewNodeRight(std::string _name, int _id);
-    Node *attachNewNodeDown(std::string _name, int _id);
-    Node *attachNewNodeLeft(std::string _name, int _id);
 
 
+    Node *attachNewNode(std::string _name, int _id, Vector2f _iso_pos, int weight1, int weight2);
 
     int getId();
     std::string getName();
     void resetForDijkstra();
-
+    int connectNodes(Node *firstNode, Node *secondNode, int relDir, int weight1, int weight2);
 
 
 
@@ -68,7 +71,12 @@ public:
     }
 
 
+
+
+
 private:
     std::string name;
     int id;
+    Vector2f iso_pos;
+    std::string cn = "Node.cpp";
 };
