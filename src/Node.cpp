@@ -22,10 +22,46 @@ Node::Node(std::string _name, int _id, Vector2f _iso_pos)
 
 
 
+void Node::dump(int indent)
+{
+    std::string ind = "";
+    for(int n = 0; n < indent; n++) {
+        ind += " ";
+    }
+    std::cout << "\n";
+    if(up->to != nullptr) {
+        std::cout << ind << "  " << up->to->getName() << "\n";
+    } else {
+        std::cout << ind <<"     NULL      \n";
+
+    }
+
+
+    std::cout << ind << "   +--------+\n";
+    std::cout << ind << "   [ " << this->getName() << "  ]\n";
+    std::cout << ind << "   +--------+\n";
+    if(down->to != nullptr) {
+        std::cout << ind << "  " << down->to->getName() << "\n";
+
+    } else {
+        std::cout << ind << "      NULL   \n";
+    }
+
+}
+
+
+
 /// Return nullptr on error, otherwise the new node we created
 // (--)
 Node *Node::attachNewNode(std::string _name, int _id, Vector2f _iso_pos, int weight1, int weight2)
 {
+
+
+    std::cout << "\n\nattachNewNode()\n";
+    std::cout << "this node before:\n";
+    this->dump(0);
+
+
     Node *newNode = new Node(_name, _id, _iso_pos);
 
     // Find out relative positioning (up, right, down or left) to the current node
@@ -78,6 +114,11 @@ Node *Node::attachNewNode(std::string _name, int _id, Vector2f _iso_pos, int wei
     }
 
     connectNodes(this, newNode, relDir, weight1, weight2);
+
+
+
+    std::cout << "                          this node after:\n";
+    this->dump(20);
 
     return newNode;
 
@@ -331,6 +372,9 @@ int Node::connectNodes(Node *firstNode, Node *secondNode, int relDir, int weight
         secondNode->up->from = secondNode;
         firstNode->up->weight = weight2;
         secondNode->up->to = firstNode;
+
+        std::cout << "  " << firstNode->getName() << " down to " << secondNode->getName() << "\n";
+
     }
 
 
@@ -348,6 +392,8 @@ int Node::connectNodes(Node *firstNode, Node *secondNode, int relDir, int weight
         firstNode->right->weight = weight2;
         secondNode->right->to = firstNode;
     }
+
+
 
 
     return 0;

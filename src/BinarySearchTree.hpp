@@ -29,6 +29,8 @@ class BinarySearchTree
 {
 public:
     BinarySearchTree();
+    void dump(BSTNode *currNode);
+    void dumpBST();
     add(int x, int debugLevel);
     findVal(int x, int debugLevel);
 

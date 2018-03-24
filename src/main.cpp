@@ -83,6 +83,23 @@ int generateID(Vector2f iso_pos)
 
 
 
+std::stack <Vector2f> *reverseStack(std::stack <Vector2f> *stacker)
+{
+
+    std::stack <Vector2f> *newStacker  = new std::stack <Vector2f>();
+
+    while(!stacker->empty()) {
+
+        newStacker->push( stacker->top() );
+
+        stacker->pop();
+    }
+
+    return newStacker;
+
+
+}
+
 
 
 
@@ -128,7 +145,7 @@ int main(int argc, char *argv[])
 
 
     // Now add a lot of roads to this road
-    Node *road1 =     roads->findNode(searchId,0);
+    Node *road1 = roads->findNode(searchId,0);
     if(road1 == nullptr) { std::cout << "error\n";  return -1;  }
 
 
@@ -161,18 +178,24 @@ int main(int argc, char *argv[])
 
     iso_pos.y = 8; iso_pos.x = 4;    possies.push(iso_pos);
 
+    std::stack<Vector2f> *finalPossies = reverseStack(&possies);
+
 
 
     // Pop the stack and bind them all together, like a snake moving through the road network
     workNode = road1;   // start at the first road node
-    while(!possies.empty()) {
-        iso_pos = possies.top();
-        possies.pop();
+    while(!finalPossies->empty()) {
+        iso_pos = finalPossies->top();
+        finalPossies->pop();
+
+
         workNode = workNode->attachNewNode(iso_to_str(iso_pos), searchId, iso_pos, 1,1);
+
+        std::cout << " workNode at= " << workNode->getName() << "\n";
 
     }
 
-
+/*
     // Bind special gaps... ugh
     iso_pos.y = 1; iso_pos.x = 0; searchId = generateID(iso_pos);
     workNode = roads->findNode(searchId, 0);
@@ -183,67 +206,23 @@ int main(int argc, char *argv[])
 
     workNode->attachNodeDown(workNode2);
 
-
-
-
-
-
-
-/*
-
-
-    /// 1,0
-    iso_pos = Vector2f(); iso_pos.y = 1; iso_pos.x = 0; searchId = generateID(iso_pos);
-    Node *road2 = road1->attachNewNode(iso_to_str(iso_pos), searchId, iso_pos, 1, 1);
-
-
-
-    /// 1,1
-    iso_pos = Vector2f(); iso_pos.y = 1; iso_pos.x = 1; searchId = generateID(iso_pos);
-
-    Node *road3 = road2->attachNewNode(iso_to_str(iso_pos), searchId, iso_pos, 1, 1);
-
-
-    /// 1,2
-    iso_pos = Vector2f();    iso_pos.y = 1;    iso_pos.x = 2;  searchId = generateID(iso_pos);
-    Node *road4 = road3->attachNewNode(iso_to_str(iso_pos), searchId, iso_pos, 1, 1);
-
-
-
-    /// 2,1
-    iso_pos = Vector2f();    iso_pos.y = 2;    iso_pos.x = 1;  searchId = generateID(iso_pos);
-    Node *road5 = road3->attachNewNode(iso_to_str(iso_pos), searchId, iso_pos, 1, 1);
-
-
-
-    /// 2,0
-    iso_pos = Vector2f();    iso_pos.y = 2;    iso_pos.x = 0;  searchId = generateID(iso_pos);
-    Node *road6 = road5->attachNewNode(iso_to_str(iso_pos), searchId, iso_pos, 1, 1);
-
-
-
-    // bind a gap
-    road6->attachNodeUp(road2);
-
-
-
-
-
-
-    /// 2,2
-    iso_pos = Vector2f();    iso_pos.y = 3;    iso_pos.x =1;  searchId = generateID(iso_pos);
-    Node *road7 = road5->attachNewNode(iso_to_str(iso_pos), searchId, iso_pos, 1, 1);
-
 */
-    std::cout << "\n\n ** graph created!\n";
+
+
+
+    std::cout << "\n\nGraph created:\n---------------------------------\n";
 
 
     // dump entire graph
-    roads->dump(0);
+
+    road1->dump(0);
+
+
+    roads->dump(2);
 
 
 
-    std::cout << "\n\nRunning Dijkstra:\n---------------\n";
+    std::cout << "\n\nRunning Dijkstra:\n------------------------------\n";
 
 
 
@@ -253,8 +232,9 @@ int main(int argc, char *argv[])
     iso_pos.x = 0;
     Node *startNode = roads->findNode( generateID(iso_pos), 0);
 
+
     iso_pos.y = 1;
-    iso_pos.x = 2;
+    iso_pos.x = 0;
     Node *endNode   = roads->findNode ( generateID(iso_pos) , 0);
 
     if(startNode == nullptr || endNode == nullptr) {

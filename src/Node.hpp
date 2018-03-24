@@ -24,6 +24,7 @@ class Node
 public:
     Node(std::string _name, int _id, Vector2f _iso_pos);
     void createLink();
+    void dump(int indent);
 
     void attachNodeUp(Node *other);
     void attachNodeRight(Node *other);

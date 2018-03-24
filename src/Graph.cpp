@@ -11,8 +11,12 @@ Graph::Graph(std::string _name)
 
 
 // Ojsan vad den här kommer behöva TESTANDE
-// Skulle vara fantastiskt om den kunde plottas.... med en matris som populeras och returneras
-// (-+)
+
+// Söker igenom hela grafen
+// Lägger in en 1:a i matrisen vid Node
+// Annars 0:a
+
+// (--) Buggar... hm kanske
 HurkaMatrixV1 *Graph::clockwiseTraverseUpFirst(Node *curr, BinarySearchTree *visited, HurkaMatrixV1 *matrix, int debugLevel)
 {
 
@@ -27,19 +31,27 @@ HurkaMatrixV1 *Graph::clockwiseTraverseUpFirst(Node *curr, BinarySearchTree *vis
     // Have we already visited this node?
     int result = visited->findVal(curr->getId(), 0 );
 
+    if(debugLevel >=2) { std::cout << "clockwiseTraverseUpFirst\n-------------------------------\n";
+
+        std::cout << "dumping visited nodes:\n";
+        visited->dumpBST();
+    }
+
 
 
     if(result == -1) {
+
+        if(debugLevel >= 2) { std::cout << "never seen node " << curr->getName() << " before\n"; }
 
         // Never seen this node before, output its value
         int m = 0;
         int n = 0;
 
+
         curr->idTo_iso_pos(curr->getId(), &m, &n);
         matrix->matrix[m][n] = 1;
 
-
-        std::cout << "curr id = " << curr->getId() << ", name = \"" << curr->getName() << "\"\n";
+        if(debugLevel >=1 ) { std::cout << "curr id = " << curr->getId() << ", name = \"" << curr->getName() << "\"\n"; }
 
         // add to visited
         visited->add(curr->getId(), debugLevel);
@@ -60,6 +72,9 @@ HurkaMatrixV1 *Graph::clockwiseTraverseUpFirst(Node *curr, BinarySearchTree *vis
         /// Down
         if(curr->down->to != nullptr) {
 
+
+            std::cout << "going down to node= " << curr->down->to->getName() << "\n";
+            visited->dumpBST();
             clockwiseTraverseUpFirst(curr->down->to, visited, matrix, debugLevel);
 
         }

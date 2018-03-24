@@ -4,7 +4,28 @@ BinarySearchTree::BinarySearchTree()
     root = nullptr;
 }
 
+void BinarySearchTree::dumpBST()
+{
+    dump(root);
+}
 
+void BinarySearchTree::dump(BSTNode *currNode)
+{
+    if(currNode == nullptr) {
+        std::cout << "trying to dump nullptr\n";
+        return ;
+    }
+    if(currNode->left != nullptr) {
+        std::cout << "             (" << currNode->val << ")\n";
+        currNode = currNode->left;
+        dump(currNode);
+    }
+
+    if(currNode->right != nullptr) {
+        currNode = currNode->right;
+        dump(currNode);
+    }
+}
 
 // Seems to work
 // (-+)
@@ -120,6 +141,10 @@ int BinarySearchTree::findVal(int x, int debugLevel)
 
     }
 
+    if(!found) {
+            std::cout << "!!!errr fanns inte\n";
+        return -1;
+    }
 
     return val;
 }
