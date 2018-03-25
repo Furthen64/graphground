@@ -112,11 +112,12 @@ int main(int argc, char *argv[])
 
     // make your own salads
 
-    //testPrioQueue();
 
 
-    int searchId;
+    int searchId = -1;
     Vector2f iso_pos ;
+    iso_pos.y = -1;
+    iso_pos.x = -1;
     Node *workNode = nullptr;
     Node *workNode2 = nullptr;
 
@@ -130,6 +131,10 @@ int main(int argc, char *argv[])
 
 
 
+    std::cout << "\nTesting the Graph by creating a complex road network \n";
+    std::cout << "and running Dijkstra from A to B \n-------------------------------------------------------\n";
+
+
 
     Graph *roads = new Graph("road_network_1");
 
@@ -139,9 +144,6 @@ int main(int argc, char *argv[])
     // create the first road
     iso_pos = Vector2f();  iso_pos.y = 0; iso_pos.x = 0; searchId = generateID(iso_pos);
     roads->addFirstNode(iso_to_str(iso_pos), searchId, iso_pos);
-
-
-
 
 
     // Now add a lot of roads to this road
@@ -168,10 +170,10 @@ int main(int argc, char *argv[])
 
     iso_pos.y = 5; iso_pos.x = 2;    possies.push(iso_pos);
     iso_pos.y = 5; iso_pos.x = 3;    possies.push(iso_pos);
-    iso_pos.y = 5; iso_pos.x = 2;    possies.push(iso_pos);
-    iso_pos.y = 6; iso_pos.x = 2;    possies.push(iso_pos);
-    iso_pos.y = 6; iso_pos.x = 3;    possies.push(iso_pos);
+    iso_pos.y = 5; iso_pos.x = 4;    possies.push(iso_pos);
     iso_pos.y = 6; iso_pos.x = 4;    possies.push(iso_pos);
+    iso_pos.y = 6; iso_pos.x = 3;    possies.push(iso_pos);
+    iso_pos.y = 6; iso_pos.x = 2;    possies.push(iso_pos);
     iso_pos.y = 7; iso_pos.x = 2;    possies.push(iso_pos);
     iso_pos.y = 7; iso_pos.x = 3;    possies.push(iso_pos);
     iso_pos.y = 7; iso_pos.x = 4;    possies.push(iso_pos);
@@ -182,44 +184,50 @@ int main(int argc, char *argv[])
 
 
 
-    // Pop the stack and bind them all together, like a snake moving through the road network
+    /// Pop the stack and bind them all together, like a snake moving through the road network
+
     workNode = road1;   // start at the first road node
     while(!finalPossies->empty()) {
         iso_pos = finalPossies->top();
         finalPossies->pop();
+        searchId = generateID(iso_pos);
 
-
-        workNode = workNode->attachNewNode(iso_to_str(iso_pos), searchId, iso_pos, 1,1);
-
-        std::cout << " workNode at= " << workNode->getName() << "\n";
+        workNode = workNode->attachNewNode(iso_to_str(iso_pos), searchId, iso_pos, 1,1, 0);
 
     }
 
-/*
-    // Bind special gaps... ugh
-    iso_pos.y = 1; iso_pos.x = 0; searchId = generateID(iso_pos);
-    workNode = roads->findNode(searchId, 0);
 
-
-    iso_pos.y = 2; iso_pos.x = 0; searchId = generateID(iso_pos);
-    workNode2 = roads->findNode(searchId, 0);
-
+    /// Bind the things that weren't connected automatically
+    iso_pos.y = 1; iso_pos.x = 0; searchId = generateID(iso_pos);    workNode = roads->findNode(searchId, 0);
+    iso_pos.y = 2; iso_pos.x = 0; searchId = generateID(iso_pos);    workNode2 = roads->findNode(searchId, 0);
     workNode->attachNodeDown(workNode2);
 
-*/
+
+    iso_pos.y = 1; iso_pos.x = 1; searchId = generateID(iso_pos);    workNode = roads->findNode(searchId, 0);
+    iso_pos.y = 2; iso_pos.x = 1; searchId = generateID(iso_pos);    workNode2 = roads->findNode(searchId, 0);
+    workNode->attachNodeDown(workNode2);
+
+    iso_pos.y = 2; iso_pos.x = 1; searchId = generateID(iso_pos);    workNode = roads->findNode(searchId, 0);
+    iso_pos.y = 3; iso_pos.x = 1; searchId = generateID(iso_pos);    workNode2 = roads->findNode(searchId, 0);
+    workNode->attachNodeDown(workNode2);
+
+    iso_pos.y = 5; iso_pos.x = 2; searchId = generateID(iso_pos);    workNode = roads->findNode(searchId, 0);
+    iso_pos.y = 6; iso_pos.x = 2; searchId = generateID(iso_pos);    workNode2 = roads->findNode(searchId, 0);
+    workNode->attachNodeDown(workNode2);
+
+    iso_pos.y = 5; iso_pos.x = 3; searchId = generateID(iso_pos);    workNode = roads->findNode(searchId, 0);
+    iso_pos.y = 6; iso_pos.x = 3; searchId = generateID(iso_pos);    workNode2 = roads->findNode(searchId, 0);
+    workNode->attachNodeDown(workNode2);
+
+    iso_pos.y = 6; iso_pos.x = 3; searchId = generateID(iso_pos);    workNode = roads->findNode(searchId, 0);
+    iso_pos.y = 7; iso_pos.x = 3; searchId = generateID(iso_pos);    workNode2 = roads->findNode(searchId, 0);
+    workNode->attachNodeDown(workNode2);
+
+
 
 
 
     std::cout << "\n\nGraph created:\n---------------------------------\n";
-
-
-    // dump entire graph
-
-    road1->dump(0);
-
-
-    roads->dump(2);
-
 
 
     std::cout << "\n\nRunning Dijkstra:\n------------------------------\n";
@@ -233,8 +241,8 @@ int main(int argc, char *argv[])
     Node *startNode = roads->findNode( generateID(iso_pos), 0);
 
 
-    iso_pos.y = 1;
-    iso_pos.x = 0;
+    iso_pos.y = 8;
+    iso_pos.x = 4;
     Node *endNode   = roads->findNode ( generateID(iso_pos) , 0);
 
     if(startNode == nullptr || endNode == nullptr) {

@@ -33,12 +33,12 @@ public:
 
 
 
-    Node *attachNewNode(std::string _name, int _id, Vector2f _iso_pos, int weight1, int weight2);
+    Node *attachNewNode(std::string _name, int _id, Vector2f _iso_pos, int weight1, int weight2, int debugLevel);
 
     int getId();
     std::string getName();
     void resetForDijkstra();
-    int connectNodes(Node *firstNode, Node *secondNode, int relDir, int weight1, int weight2);
+    int connectNodes(Node *firstNode, Node *secondNode, int relDir, int weight1, int weight2, int debugLevel);
 
 
 

@@ -73,8 +73,6 @@ HurkaMatrixV1 *Graph::clockwiseTraverseUpFirst(Node *curr, BinarySearchTree *vis
         if(curr->down->to != nullptr) {
 
 
-            std::cout << "going down to node= " << curr->down->to->getName() << "\n";
-            visited->dumpBST();
             clockwiseTraverseUpFirst(curr->down->to, visited, matrix, debugLevel);
 
         }

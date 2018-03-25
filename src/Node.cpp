@@ -51,15 +51,27 @@ void Node::dump(int indent)
 
 
 
+/// FIXME: Should be via Graph instead... you should call it from Graph::attachNewNode( and supply a BST *visitedNodes ) so you can
+/// search for the _id and see if it's already in the tree and yeah warn at least?
+///
 /// Return nullptr on error, otherwise the new node we created
 // (--)
-Node *Node::attachNewNode(std::string _name, int _id, Vector2f _iso_pos, int weight1, int weight2)
+Node *Node::attachNewNode(std::string _name, int _id, Vector2f _iso_pos, int weight1, int weight2, int debugLevel)
 {
 
+    if(_id < 0){
+        std::cout << cn << " Warning!  attachNewNode got id < 0 !\n";
+    }
 
-    std::cout << "\n\nattachNewNode()\n";
-    std::cout << "this node before:\n";
-    this->dump(0);
+
+    if(debugLevel >= 1) {
+
+        std::cout << "\n\nattachNewNode()\n";
+        std::cout << "this node before:\n";
+        this->dump(0);
+    }
+
+
 
 
     Node *newNode = new Node(_name, _id, _iso_pos);
@@ -67,7 +79,9 @@ Node *Node::attachNewNode(std::string _name, int _id, Vector2f _iso_pos, int wei
     // Find out relative positioning (up, right, down or left) to the current node
 
 
-    std::cout << "curr.iso_pos (" << iso_pos.y << ", " << iso_pos.x << ")    newNode.iso_pos ( " << _iso_pos.y << ", " << _iso_pos.x << ")\n";
+    if(debugLevel >= 1) {
+        std::cout << "curr.iso_pos (" << iso_pos.y << ", " << iso_pos.x << ")    newNode.iso_pos ( " << _iso_pos.y << ", " << _iso_pos.x << ")\n";
+    }
     bool aboveOf = false;
 
     bool rightOf = false;
@@ -113,12 +127,14 @@ Node *Node::attachNewNode(std::string _name, int _id, Vector2f _iso_pos, int wei
         relDir = dir_left;
     }
 
-    connectNodes(this, newNode, relDir, weight1, weight2);
+    connectNodes(this, newNode, relDir, weight1, weight2, debugLevel);
 
 
 
-    std::cout << "                          this node after:\n";
-    this->dump(20);
+    if(debugLevel >=1) {
+        std::cout << "                          this node after:\n";
+        this->dump(20);
+    }
 
     return newNode;
 
@@ -323,11 +339,17 @@ std::string Node::getName()
 /// Return 0 on OK, -1 on FAIL
 // TEST!
 //(--)
-int Node::connectNodes(Node *firstNode, Node *secondNode, int relDir, int weight1, int weight2)
+int Node::connectNodes(Node *firstNode, Node *secondNode, int relDir, int weight1, int weight2, int debugLevel)
 {
 
     if(secondNode == nullptr) {
         std::cout << cn << " ERROR connectNodes failed because of one of the nodes are nullptr. Programming error!\n";
+        return -1;
+    }
+
+
+    if(debugLevel >= 1) {
+        std::cout << "\nconnectNodes(" << firstNode->getName() << ", " << secondNode->getName() << ")\n";
     }
 
     ///  firstNode  UP  secondNode
@@ -373,7 +395,8 @@ int Node::connectNodes(Node *firstNode, Node *secondNode, int relDir, int weight
         firstNode->up->weight = weight2;
         secondNode->up->to = firstNode;
 
-        std::cout << "  " << firstNode->getName() << " down to " << secondNode->getName() << "\n";
+
+
 
     }
 
