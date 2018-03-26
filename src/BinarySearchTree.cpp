@@ -9,14 +9,20 @@ void BinarySearchTree::dumpBST()
     dump(root);
 }
 
+
+// TEST
+// (--)
 void BinarySearchTree::dump(BSTNode *currNode)
 {
     if(currNode == nullptr) {
         std::cout << "trying to dump nullptr\n";
         return ;
     }
+
+    std::cout << "             (" << currNode->val << ")\n";
+
+
     if(currNode->left != nullptr) {
-        std::cout << "             (" << currNode->val << ")\n";
         currNode = currNode->left;
         dump(currNode);
     }

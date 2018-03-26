@@ -1,6 +1,7 @@
 #include <string>
 #include <iostream>
 #include <climits>
+#include <sstream>
 
 #include "Vector2f.hpp"
 

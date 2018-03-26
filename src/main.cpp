@@ -121,6 +121,7 @@ int main(int argc, char *argv[])
     Node *workNode = nullptr;
     Node *workNode2 = nullptr;
 
+    ResultSet *dijkstraResult = nullptr;
 
 
 
@@ -224,14 +225,10 @@ int main(int argc, char *argv[])
     workNode->attachNodeDown(workNode2);
 
 
-
-
-
     std::cout << "\n\nGraph created:\n---------------------------------\n";
 
 
-    std::cout << "\n\nRunning Dijkstra:\n------------------------------\n";
-
+    std::cout << "\n\nRunning Dijkstra 1st time:\n------------------------------\n";
 
 
     // Setup start and end positions for Dijkstra
@@ -254,7 +251,7 @@ int main(int argc, char *argv[])
     std::cout << "  * endNode.id= " << endNode->getId() << "\n";
 
 
-    ResultSet *dijkstraResult = roads->runDijkstra(startNode, endNode, 0);
+    dijkstraResult = roads->runDijkstra(startNode, endNode, 2);
 
     if(dijkstraResult->shortestPath.empty()) {
         return 0;
@@ -267,6 +264,62 @@ int main(int argc, char *argv[])
     roads->printPathFromDijkstra(dijkstraResult);
 
     std::cout << "\n";
+
+
+
+
+
+    std::cout << "\n\nReset all nodes\n-------------------------------\n";
+    roads->dump(0, 1);
+
+    roads->resetAllNodes();
+    std::cout << "\n\n\n ***** Should be reseted ****\n\n\n";
+
+  //  roads->dump(0, 1 );
+
+
+
+
+
+    std::cout << "\n\nTry Dijkstra again\n--------------------------\n";
+
+     // Setup start and end positions for Dijkstra
+
+    iso_pos.y = 0;
+    iso_pos.x = 0;
+    startNode = roads->findNode( generateID(iso_pos), 0);
+
+
+    iso_pos.y = 8;
+    iso_pos.x = 4;
+    endNode   = roads->findNode ( generateID(iso_pos) , 0);
+
+    if(startNode == nullptr || endNode == nullptr) {
+        std::cout << "ERROR! Could not find the start or end node for Dijkstra\n";
+        return 0;
+    }
+
+    std::cout << "  * startNode.id=" << startNode->getId() << "\n";
+    std::cout << "  * endNode.id= " << endNode->getId() << "\n";
+
+
+
+    dijkstraResult = roads->runDijkstra(startNode, endNode, 0);
+
+
+    if(dijkstraResult->shortestPath.empty()) {
+        return 0;
+    }
+
+    std::cout << "\n";
+    std::cout << "The shortest distance is=" << dijkstraResult->resultInt << "\n";
+    std::cout << "The path is: \n    ";
+
+    roads->printPathFromDijkstra(dijkstraResult);
+
+    std::cout << "\n";
+
+
 
 
 

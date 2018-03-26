@@ -10,14 +10,13 @@ Graph::Graph(std::string _name)
 
 
 
-// Ojsan vad den här kommer behöva TESTANDE
 
-// Söker igenom hela grafen
-// Lägger in en 1:a i matrisen vid Node
-// Annars 0:a
-
-// (--) Buggar... hm kanske
-HurkaMatrixV1 *Graph::clockwiseTraverseUpFirst(Node *curr, BinarySearchTree *visited, HurkaMatrixV1 *matrix, int debugLevel)
+/// Walks the entire Graph.
+/// While it does so, will put in 1s in a matrix whereever the road is.
+/// @@PARAMS dumpNodes = if true will do a .dump on all Nodes it find
+/// Recursive.
+// (-+)
+HurkaMatrixV1 *Graph::clockwiseTraverseUpFirst(Node *curr, BinarySearchTree *visited, HurkaMatrixV1 *matrix, bool dumpNodes, int debugLevel)
 {
 
     // Go clockwise from Top
@@ -28,7 +27,7 @@ HurkaMatrixV1 *Graph::clockwiseTraverseUpFirst(Node *curr, BinarySearchTree *vis
 
 
 
-    // Have we already visited this node?
+    /// Have we already visited this node?
     int result = visited->findVal(curr->getId(), 0 );
 
     if(debugLevel >=2) { std::cout << "clockwiseTraverseUpFirst\n-------------------------------\n";
@@ -50,7 +49,10 @@ HurkaMatrixV1 *Graph::clockwiseTraverseUpFirst(Node *curr, BinarySearchTree *vis
 
         curr->idTo_iso_pos(curr->getId(), &m, &n);
         matrix->matrix[m][n] = 1;
-
+        if(dumpNodes==true)
+        {
+            curr->dump(3);
+        }
         if(debugLevel >=1 ) { std::cout << "curr id = " << curr->getId() << ", name = \"" << curr->getName() << "\"\n"; }
 
         // add to visited
@@ -58,14 +60,13 @@ HurkaMatrixV1 *Graph::clockwiseTraverseUpFirst(Node *curr, BinarySearchTree *vis
 
         /// Up
         if(curr->up->to != nullptr) {
-
-            clockwiseTraverseUpFirst(curr->up->to, visited, matrix, debugLevel);
+            clockwiseTraverseUpFirst(curr->up->to, visited, matrix, dumpNodes, debugLevel);
         }
 
         /// Right
         if(curr->right->to != nullptr) {
 
-            clockwiseTraverseUpFirst(curr->right->to, visited, matrix, debugLevel);
+            clockwiseTraverseUpFirst(curr->right->to, visited, matrix,dumpNodes, debugLevel);
 
         }
 
@@ -73,14 +74,14 @@ HurkaMatrixV1 *Graph::clockwiseTraverseUpFirst(Node *curr, BinarySearchTree *vis
         if(curr->down->to != nullptr) {
 
 
-            clockwiseTraverseUpFirst(curr->down->to, visited, matrix, debugLevel);
+            clockwiseTraverseUpFirst(curr->down->to, visited, matrix, dumpNodes,debugLevel);
 
         }
 
         /// Left
         if(curr->left->to != nullptr) {
 
-            clockwiseTraverseUpFirst(curr->left->to, visited, matrix, debugLevel);
+            clockwiseTraverseUpFirst(curr->left->to, visited, matrix, dumpNodes,debugLevel);
 
         }
 
@@ -225,18 +226,22 @@ void clockwiseSearchUpFirst(Node *curr, int searchVal)
 
 
 // (--)
-void Graph::dump(int debugLevel)
+void Graph::dump(int debugLevel, int dumpNodes)
 {
-    std::cout << "\n\nDumping Graph:\n";
+    std::cout << "\n\nDumping all Nodes in Graph:\n";
 
     BinarySearchTree *visited = new BinarySearchTree();
 
     HurkaMatrixV1 *matrix = new HurkaMatrixV1(16,16);
 
-    matrix = clockwiseTraverseUpFirst(head, visited, matrix, debugLevel);
+    matrix = clockwiseTraverseUpFirst(head, visited, matrix, dumpNodes, debugLevel);
 
+    std::cout << "\n\nDumping Graph as Matrix:\n";
 
     matrix->dump();
+
+
+
 }
 
 
@@ -300,6 +305,70 @@ Node *Graph::findNode(int searchId, int debugLevel)
 }
 
 
+
+
+// TEST!
+// (--)
+void Graph::traverseAndReset(Node *curr, BinarySearchTree *visited)
+{
+
+
+    // Have we already visited this node?
+    int result = visited->findVal(curr->getId(), 0 );
+
+    if(result == -1)
+    {
+
+
+        curr->resetForDijkstra();
+        visited->add(curr->getId(), 0);
+
+
+         /// Up
+        if(curr->up->to != nullptr) {
+
+            traverseAndReset(curr->up->to, visited);
+        }
+
+        /// Right
+        if(curr->right->to != nullptr) {
+
+            traverseAndReset(curr->right->to, visited);
+
+        }
+
+
+        /// Down
+        if(curr->down->to != nullptr) {
+
+            traverseAndReset(curr->down->to, visited);
+
+        }
+
+        /// Left
+        if(curr->left->to != nullptr) {
+
+            traverseAndReset(curr->left->to, visited);
+
+        }
+    }
+
+}
+
+
+
+// (--)
+void Graph::resetAllNodes()
+{
+    BinarySearchTree *visited = new BinarySearchTree();
+
+    traverseAndReset(this->head, visited);    // Runs a recursive reset function
+}
+
+
+
+
+
 // I have tested starting with
 //
 //   (0,1)        Which is a single road directly connected to an intersection      Works!
@@ -308,7 +377,9 @@ Node *Graph::findNode(int searchId, int debugLevel)
 // Tested also from maany points to points in my road network, and it all seems to work
 //
 //
-// (--)
+// DO i need to put nodes so many times in the VisitedNodes? Seems like a byproduct of old code?
+
+// (--+)
 ResultSet *Graph::runDijkstra(Node *startNode, Node *endNode, int debugLevel)
 {
 
@@ -332,7 +403,7 @@ ResultSet *Graph::runDijkstra(Node *startNode, Node *endNode, int debugLevel)
 
 
     /// FIXME, TODO: Run resetDijkstra for all Nodes
-    // resetAllNodes();
+    //resetAllNodes();
 
 
     /// setup the first node
@@ -432,7 +503,6 @@ ResultSet *Graph::runDijkstra(Node *startNode, Node *endNode, int debugLevel)
 
 
     steps = 0;
-    maxSteps = 400;
     done = false;
 
     if(debugLevel >=1 ) {
@@ -788,16 +858,37 @@ ResultSet *Graph::runDijkstra(Node *startNode, Node *endNode, int debugLevel)
     // Store the total fastest distance from start to end
     result->resultInt = endNode->permanentLabel;
 
-    std::cout << "\n";
+
+    if(debugLevel >=1 ) {
+            std::cout << "\n";
+    }
+
+
+    if(debugLevel >=2) {
+        // Dumping result
+        std::cout << "Dumping result:\n";
+        result->dumpShortestPath();
+    }
+
+
+
+
+    // OBSERVE, when we return we have changed the state of nodes in the graph ... should it be like that?
 
     return result;
 
 }
 
 
-// (--)
+/// Prints the path from left (start) to right (end)
+// (-+)
 void Graph::printPathFromDijkstra(ResultSet *dijkstraResult)
 {
+
+    if(dijkstraResult == nullptr) {
+        std::cout << cn << " ERROR dijkstraResult has nullptr in printPathFromDijkstra()\n";
+        return ;
+    }
 
     Node *workNode;
     std::string str;

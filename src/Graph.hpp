@@ -38,8 +38,10 @@ public:
     std::stack<Node *> shortestPath;
     std::stack<Node *> shortestPath_memcpy;
 
-    // TEST!
-    // (--)
+
+
+    /// Dumps the shortest path as an array with all the id's of the nodes
+    // (-+)
     void dumpShortestPath()
     {
         // Copy the shortestpath to shortestpath_memcpy
@@ -70,6 +72,9 @@ public:
         }
 
     }
+
+
+
 private:
 
 };
@@ -80,25 +85,17 @@ class Graph
 public:
     Graph(std::string _name);
 
-    HurkaMatrixV1 *clockwiseTraverseUpFirst(Node *curr, BinarySearchTree *visited, HurkaMatrixV1 *matrix, int debugLevel);
+    HurkaMatrixV1 *clockwiseTraverseUpFirst(Node *curr, BinarySearchTree *visited, HurkaMatrixV1 *matrix, bool dumpNodes, int debugLevel);
     Node *         clockwiseTraverseUpFirstFindNode(Node *curr, BinarySearchTree *visited, HurkaMatrixV1 *matrix, int searchId, int debugLevel);
-    void dump(int debugLevel);
-
+    void dump(int debugLevel, int dumpNodes);
     void test();
     Node *getFirstNode();
-
-
-
     void addFirstNode(std::string _name, int _id, Vector2f _iso_pos);
     Node *findNode(int searchId, int debugLevel);
-
     ResultSet *runDijkstra(Node *startNode, Node *endNode, int debugLevel);
-
     void printPathFromDijkstra(ResultSet *dijkstraResult);
-
-
-
-
+    void traverseAndReset(Node *curr, BinarySearchTree *visited);
+    void resetAllNodes();
 
 
 

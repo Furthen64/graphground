@@ -1,6 +1,7 @@
 #include "Node.hpp"
 #include "Link.hpp"
 
+// (-+)
 Node::Node(std::string _name, int _id, Vector2f _iso_pos)
 {
     name = _name;
@@ -22,30 +23,183 @@ Node::Node(std::string _name, int _id, Vector2f _iso_pos)
 
 
 
+
+// if  INT_MAX , return "INF"
+// (-+)
+std::string normInt(int val)
+{
+    std::string resultStr = std::string();
+
+    if(val == INT_MAX) {
+        resultStr.append("INF");
+    } else {
+        resultStr = std::to_string(val);
+    }
+
+    return resultStr;
+
+}
+
+
+// Displays the neighbor nodes of this node, the weights and the dijkstra labels
+//
+// (--)
 void Node::dump(int indent)
 {
+
+
     std::string ind = "";
     for(int n = 0; n < indent; n++) {
         ind += " ";
     }
+
+    // Find out what neighbors to Node exists
+    bool hasUp = false;
+    bool hasRight = false;
+    bool hasDown = false;
+    bool hasLeft = false;
+    if(up->to != nullptr) { hasUp = true; }
+    if(right->to != nullptr) { hasRight= true; }
+    if(down->to != nullptr) { hasDown= true; }
+    if(left->to != nullptr) { hasLeft= true; }
+
+
+
     std::cout << "\n";
-    if(up->to != nullptr) {
-        std::cout << ind << "  " << up->to->getName() << "\n";
-    } else {
-        std::cout << ind <<"     NULL      \n";
 
+
+    std::stringstream up1; std::stringstream up2; std::stringstream up3;
+    std::stringstream mid1; std::stringstream mid2; std::stringstream mid3;
+
+
+    if(hasUp) {
+        up1 << "\ttemp=" << normInt(up->to->tempLabel);
+        up2 << "\t" << up->to->getName() << "\t\t";
+        up3 << "\tperm=" << normInt(up->to->permanentLabel);
+    } else {
+        up1.clear();
+        up2 << "\tNULL";
+        up3.clear();
     }
 
+    mid1 << "+--------+";
+    mid2 << "| " << this->getName() << " |";
+    mid3 << "+--------+";
 
-    std::cout << ind << "   +--------+\n";
-    std::cout << ind << "   [ " << this->getName() << "  ]\n";
-    std::cout << ind << "   +--------+\n";
-    if(down->to != nullptr) {
-        std::cout << ind << "  " << down->to->getName() << "\n";
 
+
+
+/*
+                       temp=INF
+                       (1,0)
+                       perm=INF
+                       +--------+              temp=F
+       NULL            | (2,0)  |              (2,1)
+                       +--------+              perm=F
+                       temp=F
+                       (3,0)
+                       perm=F
+
+*/
+
+
+
+
+
+    std::cout << ind << up1.str() << "\n";
+    std::cout << ind << up2.str() << "\n";
+    std::cout << ind << up3.str() << "\n";
+    std::cout << ind << "" << mid1.str() << "" << "\n";
+    std::cout << ind << "" << mid2.str() << "" << "\n";
+    std::cout << ind << "" << mid3.str() << "" << "\n";
+    /*
+    std::cout << ind << downStr1 << "\n";
+    std::cout << ind << downStr2<< "\n";
+    std::cout << ind << downStr3<< "\n";*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+
+
+
+    if(hasUp) {
+         upStr1 = "\t\t\ttemp=" + normInt(up->to->tempLabel);
+         upStr2 = "\t\t\t" + up->to->getName();
+         upStr3 = "\t\t\tperm=" + normInt(up->to->permanentLabel);
     } else {
-        std::cout << ind << "      NULL   \n";
+        upStr1 = "";
+        upStr2 = "\t\t\tNULL";
+        upStr3 = "";
     }
+
+    if(hasRight) {
+            rightStr1 = "\t\ttemp=" + normInt(right->to->tempLabel);
+            rightStr2 = "\t\t" + right->to->getName();
+            rightStr3 = "\t\tperm=" + normInt(right->to->permanentLabel);
+    } else {
+        rightStr1 = "";
+        rightStr2 = "\t\t\tNULL";
+        rightStr3 = "";
+    }
+
+    if(hasDown) {
+        downStr1 = "\t\t\ttemp=" + normInt(down->to->tempLabel);
+        downStr2 = "\t\t\t" + down->to->getName();
+        downStr3 = "\t\t\tperm=" + normInt(down->to->permanentLabel);
+    } else {
+        downStr1 = "";
+        downStr2 = "\t\t\tNULL";
+        downStr3 = "";
+    }
+
+    if(hasLeft) {
+        leftStr1    = "temp=" + normInt(left->to->tempLabel) + "\t\t" ;
+        leftStr2    = "" + left->to->getName();
+        leftStr2    += " -- " + left->weight;
+        leftStr2    += " --- \t";
+        leftStr3    = "perm=" + normInt(left->to->permanentLabel) + "\t\t";
+    } else {
+        leftStr1 = "\t\t\t";
+        leftStr2 = "\tNULL\t\t";
+        leftStr3 = "\t\t\t";
+    }
+
+    middleStr1  = "+--------+";
+    middleStr2  = "| " + this->getName() + "  |";
+    middleStr3  = "+--------+";
+
+
+
+
+    std::cout << ind << upStr1 << "\n";
+    std::cout << ind << upStr2 << "\n";
+    std::cout << ind << upStr3 << "\n";
+    std::cout << ind << leftStr1 << middleStr1 << rightStr1 << "\n";
+    std::cout << ind << leftStr2 << middleStr2 << rightStr2 << "\n";
+    std::cout << ind << leftStr3 << middleStr3 << rightStr3 << "\n";
+    std::cout << ind << downStr1 << "\n";
+    std::cout << ind << downStr2<< "\n";
+    std::cout << ind << downStr3<< "\n";
+*/
+
+
+
+
+    std::cout << "\n\n";
+
 
 }
 
@@ -58,9 +212,11 @@ void Node::dump(int indent)
 // (--)
 Node *Node::attachNewNode(std::string _name, int _id, Vector2f _iso_pos, int weight1, int weight2, int debugLevel)
 {
+    int result = 0;
 
     if(_id < 0){
         std::cout << cn << " Warning!  attachNewNode got id < 0 !\n";
+        return nullptr;
     }
 
 
@@ -127,7 +283,13 @@ Node *Node::attachNewNode(std::string _name, int _id, Vector2f _iso_pos, int wei
         relDir = dir_left;
     }
 
-    connectNodes(this, newNode, relDir, weight1, weight2, debugLevel);
+    result = connectNodes(this, newNode, relDir, weight1, weight2, debugLevel);
+
+
+    if(result == -1) {
+        std::cout << cn << " ERROR! Could not connect nodes.\n";
+        return nullptr;
+    }
 
 
 
@@ -137,7 +299,6 @@ Node *Node::attachNewNode(std::string _name, int _id, Vector2f _iso_pos, int wei
     }
 
     return newNode;
-
 }
 
 
@@ -152,85 +313,8 @@ void Node::resetForDijkstra()
 {
     permanentLabel = INT_MAX;    // Set to INFINITY
     tempLabel = INT_MAX;
+    fastestPrevNode = nullptr;
 }
-
-
-
-/*
-
-Node *Node::attachNewNodeUp(std::string _name, int _id)
-{
-    Node *newNode = new Node(_name, _id);
-
-    // attach it downwards to current node (this)
-    this->up->from = this;
-    this->up->to = newNode;
-
-    newNode->down->from = newNode;        // also connect the new node upwards to our current node (doubly linked)
-    newNode->down->to = this;
-
-    return newNode;
-
-}
-
-Node *Node::attachNewNodeRight(std::string _name, int _id)
-{
-    Node *newNode = new Node(_name, _id);
-
-    // attach it downwards to current node (this)
-    this->right->from = this;
-    this->right->to = newNode;
-
-    newNode->left->from = newNode;
-    newNode->left->to = this;
-
-    return newNode;
-
-}
-
-
-
-
-// Test more!
-
-/// Returns the new Node
-// (--)
-Node *Node::attachNewNodeDown(std::string _name, int _id)
-{
-    Node *newNode = new Node(_name, _id);
-
-    // attach it downwards to current node (this)
-    this->down->from = this;
-    this->down->to = newNode;
-
-    newNode->up->from = newNode;
-    newNode->up->to = this;
-
-    return newNode;
-
-}
-
-
-/// Returns the new Node
-// (--)
-Node *Node::attachNewNodeLeft(std::string _name, int _id)
-{
-    Node *newNode = new Node(_name, _id);
-
-    // attach it downwards to current node (this)
-    this->left->from = this;
-    this->left->to = newNode;
-
-    newNode->right->from = newNode;
-    newNode->right->to = this;
-
-    return newNode;
-
-}
-
-
-
-*/
 
 
 
@@ -332,13 +416,11 @@ std::string Node::getName()
 
 
 /// Attaches secondnode to the firstnode.
-/// reldir1 is link going from first to second
-/// reldir2 is reverse, going from second to first
-/// weight1 is for reldir1
-/// weight2 is for reldir2
+/// reldir is link going from first to second
+/// weight1 is for weight from first to second
+/// weight2 is for weight from second to first
 /// Return 0 on OK, -1 on FAIL
-// TEST!
-//(--)
+//(-+)
 int Node::connectNodes(Node *firstNode, Node *secondNode, int relDir, int weight1, int weight2, int debugLevel)
 {
 
