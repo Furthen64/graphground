@@ -33,6 +33,8 @@
 		</Compiler>
 		<Unit filename="src/BinarySearchTree.cpp" />
 		<Unit filename="src/BinarySearchTree.hpp" />
+		<Unit filename="src/CityCreator.cpp" />
+		<Unit filename="src/CityCreator.hpp" />
 		<Unit filename="src/Graph.cpp" />
 		<Unit filename="src/Graph.hpp" />
 		<Unit filename="src/HurkaMatrixV1.cpp" />
@@ -42,6 +44,7 @@
 		<Unit filename="src/Node.cpp" />
 		<Unit filename="src/Node.hpp" />
 		<Unit filename="src/Vector2f.hpp" />
+		<Unit filename="src/dijkstra_examples.txt" />
 		<Unit filename="src/main.cpp" />
 		<Extensions>
 			<code_completion />

@@ -1,7 +1,7 @@
 #include "Node.hpp"
 #include "Link.hpp"
 
-// (-+)
+// (++)
 Node::Node(std::string _name, int _id, Vector2f _iso_pos)
 {
     name = _name;
@@ -43,7 +43,7 @@ std::string normInt(int val)
 
 // Displays the neighbor nodes of this node, the weights and the dijkstra labels
 //
-// (--)
+// (-+)
 void Node::dump(int indent)
 {
 
@@ -69,27 +69,68 @@ void Node::dump(int indent)
 
 
     std::stringstream up1; std::stringstream up2; std::stringstream up3;
+    std::stringstream left1; std::stringstream left2; std::stringstream left3;
     std::stringstream mid1; std::stringstream mid2; std::stringstream mid3;
+    std::stringstream right1; std::stringstream right2; std::stringstream right3;
+    std::stringstream down1; std::stringstream down2; std::stringstream down3;
 
 
     if(hasUp) {
-        up1 << "\ttemp=" << normInt(up->to->tempLabel);
-        up2 << "\t" << up->to->getName() << "\t\t";
-        up3 << "\tperm=" << normInt(up->to->permanentLabel);
+        up1 << "\t\t\t  temp=" << normInt(up->to->tempLabel);
+        up2 << "\t\t\t  " << up->to->getName() << "\t\t";
+        up3 << "\t\t\t  perm=" << normInt(up->to->permanentLabel);
     } else {
         up1.clear();
-        up2 << "\tNULL";
+        up2 << "\t\t\t  NULL";
         up3.clear();
     }
 
+    if(hasLeft) {
+        left1 << "temp=" << normInt(left->to->tempLabel) << "\t\t";
+        left2 << "" << left->to->getName() << " -- " << left->weight << " -- \t";
+        left3 << "perm=" << normInt(left->to->permanentLabel) << "\t\t";
+    } else {
+        left1 << "\t\t\t";
+        left2 << "\tNULL\t\t";
+        left3 << "\t\t\t";
+    }
+
+    if(hasRight) {
+
+        right1 << "\t\t temp=" << normInt(right->to->tempLabel);
+        right2 << "\t -- " << right->weight << " -- " << right->to->getName();
+        right3 << "\t\t perm=" << normInt(right->to->permanentLabel);
+
+    } else {
+
+
+        right1.clear();
+        right2 << "\t\t NULL";
+        right3.clear();
+    }
+
+
+     if(hasDown) {
+        down1 << "\t\t\t  temp=" << normInt(down->to->tempLabel);
+        down2 << "\t\t\t  " << down->to->getName() << "\t\t";
+        down3 << "\t\t\t  perm=" << normInt(down->to->permanentLabel);
+    } else {
+        down1.clear();
+        down2 << "\t\t\t  NULL";
+        down3.clear();
+    }
+
+
+
+
     mid1 << "+--------+";
-    mid2 << "| " << this->getName() << " |";
+    mid2 << "| " << this->getName() << "  |";
     mid3 << "+--------+";
 
 
 
-
 /*
+
                        temp=INF
                        (1,0)
                        perm=INF
@@ -109,13 +150,12 @@ void Node::dump(int indent)
     std::cout << ind << up1.str() << "\n";
     std::cout << ind << up2.str() << "\n";
     std::cout << ind << up3.str() << "\n";
-    std::cout << ind << "" << mid1.str() << "" << "\n";
-    std::cout << ind << "" << mid2.str() << "" << "\n";
-    std::cout << ind << "" << mid3.str() << "" << "\n";
-    /*
-    std::cout << ind << downStr1 << "\n";
-    std::cout << ind << downStr2<< "\n";
-    std::cout << ind << downStr3<< "\n";*/
+    std::cout << ind << left1.str() << mid1.str() << right1.str() << "\n";
+    std::cout << ind << left2.str() << mid2.str() << right2.str()  << "\n";
+    std::cout << ind << left3.str() << mid3.str() << right3.str() << "\n";
+    std::cout << ind << down1.str() << "\n";
+    std::cout << ind << down2.str() << "\n";
+    std::cout << ind << down3.str() << "\n";
 
 
 
@@ -135,25 +175,6 @@ void Node::dump(int indent)
 
 
 
-    if(hasUp) {
-         upStr1 = "\t\t\ttemp=" + normInt(up->to->tempLabel);
-         upStr2 = "\t\t\t" + up->to->getName();
-         upStr3 = "\t\t\tperm=" + normInt(up->to->permanentLabel);
-    } else {
-        upStr1 = "";
-        upStr2 = "\t\t\tNULL";
-        upStr3 = "";
-    }
-
-    if(hasRight) {
-            rightStr1 = "\t\ttemp=" + normInt(right->to->tempLabel);
-            rightStr2 = "\t\t" + right->to->getName();
-            rightStr3 = "\t\tperm=" + normInt(right->to->permanentLabel);
-    } else {
-        rightStr1 = "";
-        rightStr2 = "\t\t\tNULL";
-        rightStr3 = "";
-    }
 
     if(hasDown) {
         downStr1 = "\t\t\ttemp=" + normInt(down->to->tempLabel);
@@ -165,17 +186,6 @@ void Node::dump(int indent)
         downStr3 = "";
     }
 
-    if(hasLeft) {
-        leftStr1    = "temp=" + normInt(left->to->tempLabel) + "\t\t" ;
-        leftStr2    = "" + left->to->getName();
-        leftStr2    += " -- " + left->weight;
-        leftStr2    += " --- \t";
-        leftStr3    = "perm=" + normInt(left->to->permanentLabel) + "\t\t";
-    } else {
-        leftStr1 = "\t\t\t";
-        leftStr2 = "\tNULL\t\t";
-        leftStr3 = "\t\t\t";
-    }
 
     middleStr1  = "+--------+";
     middleStr2  = "| " + this->getName() + "  |";
@@ -209,7 +219,7 @@ void Node::dump(int indent)
 /// search for the _id and see if it's already in the tree and yeah warn at least?
 ///
 /// Return nullptr on error, otherwise the new node we created
-// (--)
+// (-+)
 Node *Node::attachNewNode(std::string _name, int _id, Vector2f _iso_pos, int weight1, int weight2, int debugLevel)
 {
     int result = 0;
@@ -308,7 +318,7 @@ Node *Node::attachNewNode(std::string _name, int _id, Vector2f _iso_pos, int wei
 
 
 
-
+// (-+)
 void Node::resetForDijkstra()
 {
     permanentLabel = INT_MAX;    // Set to INFINITY

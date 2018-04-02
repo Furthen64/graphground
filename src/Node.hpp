@@ -62,6 +62,7 @@ public:
 
 
     // Hur ska den hantera tal under 10000 ? såna där M=0
+    // 2018-03-20
     // (--)
     static void idTo_iso_pos(int _id, int *y, int *x)
     {

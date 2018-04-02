@@ -79,6 +79,29 @@ private:
 
 };
 
+
+
+
+/*
+
+Graph now works
+2018-03-26
+
+
+You can put nodes in there and build a network,
+Run the Dijkstra algorithm, get results of the fastest path from A to B
+
+You can also reset the algorithm and run it again on the same graph
+with new result
+
+For examples see:
+
+    dijkstra_examples.cpp
+
+
+
+
+*/
 class Graph
 {
 
