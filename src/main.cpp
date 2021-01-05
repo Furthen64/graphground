@@ -67,9 +67,6 @@ int main(int argc, char *argv[])
 {
 
 
-
-    // Generate your own salad by clicking your mouse
-
     Vector2f city_pos;
     city_pos.y = 5;
     city_pos.x = 5;
@@ -82,8 +79,6 @@ int main(int argc, char *argv[])
 
 
 
-    // make your own salads
-
 
 
     int searchId = -1;
@@ -93,7 +88,7 @@ int main(int argc, char *argv[])
     Node *workNode = nullptr;
     Node *workNode2 = nullptr;
 
-    ResultSet *dijkstraResult = nullptr;
+    DijkstraResult *dijkstraResult = nullptr;
 
 
     std::cout << "\nTesting the Graph by creating a complex road network \n";
@@ -229,8 +224,33 @@ int main(int argc, char *argv[])
 
     std::cout << "\n";
     std::cout << "The shortest distance is=" << dijkstraResult->resultInt << "\n";
-    std::cout << "The path is: \n    ";
 
+
+
+
+
+
+
+    std::cout << "\n\nTesting dijkstraResult->getShortestPathStack()\n";
+
+    std::stack<Node *> *myStack = dijkstraResult->getShortestPathStack();
+
+    Node *myRef = nullptr;
+
+    while(!myStack->empty()) {
+        myRef = myStack->top();
+        std::cout << myRef->getName() << "---";
+        myStack->pop();
+    }
+
+    std::cout << "\n\n\n";
+
+
+
+
+
+
+    std::cout << "The path is: \n    ";
     roads->printPathFromDijkstra(dijkstraResult);
 
     std::cout << "\n";

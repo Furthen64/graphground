@@ -2,18 +2,15 @@
 
 Graph::Graph(std::string _name)
 {
-
     name = _name;
-
-
 }
 
 
 
 
 /// Walks the entire Graph.
-/// While it does so, will put in 1s in a matrix whereever the road is.
-/// @@PARAMS dumpNodes = if true will do a .dump on all Nodes it find
+/// While walking, put 1:s in a matrix wherever the road is, 0:s everything else.
+/// dumpNodes = if true will do a .dump on all Nodes it find
 /// Recursive.
 // (-+)
 HurkaMatrixV1 *Graph::clockwiseTraverseUpFirst(Node *curr, BinarySearchTree *visited, HurkaMatrixV1 *matrix, bool dumpNodes, int debugLevel)
@@ -100,7 +97,7 @@ HurkaMatrixV1 *Graph::clockwiseTraverseUpFirst(Node *curr, BinarySearchTree *vis
 
 
 
-// Wishlist: Remove the Matrix after you're done with this. Remove all unecesseary outputs
+// Wishlist: Remove the Matrix code after you're done with this. Remove all unecesseary outputs
 // TEST
 // (--)
 Node *Graph::clockwiseTraverseUpFirstFindNode(Node *curr, BinarySearchTree *visited, HurkaMatrixV1 *matrix, int searchId, int debugLevel)
@@ -225,6 +222,7 @@ void clockwiseSearchUpFirst(Node *curr, int searchVal)
 }
 
 
+// TEST!
 // (--)
 void Graph::dump(int debugLevel, int dumpNodes)
 {
@@ -245,14 +243,14 @@ void Graph::dump(int debugLevel, int dumpNodes)
 }
 
 
-// (--)
+// (++)
 void Graph::addFirstNode(std::string _name, int _id, Vector2f _iso_pos)
 {
     head =  new Node(_name, _id, _iso_pos);
 }
 
 
-// (--)
+// (++)
 Node *Graph::getFirstNode()
 {
     return head;
@@ -261,12 +259,15 @@ Node *Graph::getFirstNode()
 
 
 /// Walks the graph in one thread and return the node, return nullptr if not found
-// (-+)     Seems to work with head and most of the nodes I tried
+//
+// Seems to work with head and most of the nodes I tried
+// (+-)
 Node *Graph::findNode(int searchId, int debugLevel)
 {
 
     if(searchId < 0) {
         std::cout << cn << " ERROR! Trying findNode with a negative searchId=" << searchId << "\n";
+        return nullptr;
     }
 
     if(debugLevel >=1) {std::cout << "\n\n *** Searching the Graph for searchId= " << searchId << "\n ------------------------\n";}
@@ -284,7 +285,6 @@ Node *Graph::findNode(int searchId, int debugLevel)
 
 
    /// Find the Node* and return it
-
 
     BinarySearchTree *visited = new BinarySearchTree();
 
@@ -380,7 +380,7 @@ void Graph::resetAllNodes()
 // DO i need to put nodes so many times in the VisitedNodes? Seems like a byproduct of old code?
 
 // (--+)
-ResultSet *Graph::runDijkstra(Node *startNode, Node *endNode, int debugLevel)
+DijkstraResult *Graph::runDijkstra(Node *startNode, Node *endNode, int debugLevel)
 {
 
     std::string ind1 = "   ";
@@ -394,7 +394,7 @@ ResultSet *Graph::runDijkstra(Node *startNode, Node *endNode, int debugLevel)
     int lastOne = false;
 
     Node *workNode = nullptr;
-    ResultSet *result = new ResultSet();
+    DijkstraResult *result = new DijkstraResult();
     BinarySearchTree *visitedNodes = new BinarySearchTree();
 
     // We need a Priority Queue to see which has the lowest value tempLabel (shortest total distance as of now)
@@ -882,7 +882,7 @@ ResultSet *Graph::runDijkstra(Node *startNode, Node *endNode, int debugLevel)
 
 /// Prints the path from left (start) to right (end)
 // (-+)
-void Graph::printPathFromDijkstra(ResultSet *dijkstraResult)
+void Graph::printPathFromDijkstra(DijkstraResult *dijkstraResult)
 {
 
     if(dijkstraResult == nullptr) {

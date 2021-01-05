@@ -148,7 +148,8 @@ int BinarySearchTree::findVal(int x, int debugLevel)
     }
 
     if(!found) {
-            std::cout << "!!!errr fanns inte\n";
+        std::cout << "ERROR Could not find the value " << x << " in the BinarySearchTree\n";
+
         return -1;
     }
 

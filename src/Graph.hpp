@@ -29,7 +29,7 @@ struct graphNodeCompare
  };
 
 
-class ResultSet
+class DijkstraResult
 {
 public:
 
@@ -38,6 +38,48 @@ public:
     std::stack<Node *> shortestPath;
     std::stack<Node *> shortestPath_memcpy;
 
+
+    // Seems to work just fine
+    // (-+)
+    std::stack<Node *> *getShortestPathStack()
+    {
+        // Copy the shortestpath to new stack
+        std::stack<Node *> *retStack = new std::stack<Node *>();
+
+
+
+
+        // First, push the stack to another stack so we get it reversed in the end ( a bit fumbly )
+        int i = 0;
+
+        Node *node;
+        while(!shortestPath.empty()) {
+
+            node = shortestPath.top();
+            shortestPath.pop();
+
+            shortestPath_memcpy.push(node);
+
+            i++;
+        }
+
+
+
+        // Copy back to the return stack (which will be in the right order)
+        // Also Copy back to the shortestPath stack because we've deleted all of its contents in the previous loop
+        while(!shortestPath_memcpy.empty()) {
+
+            node = shortestPath_memcpy.top();
+            shortestPath_memcpy.pop();
+            retStack->push(node);               // Result
+            shortestPath.push(node);            // copy to the original stack
+        }
+
+
+
+
+        return retStack;
+    }
 
 
     /// Dumps the shortest path as an array with all the id's of the nodes
@@ -65,7 +107,6 @@ public:
         // Copy back to the shortestpath
         while(!shortestPath_memcpy.empty()) {
 
-            //shortestPath_memcpy.pop();
             node = shortestPath_memcpy.top();
             shortestPath_memcpy.pop();
             shortestPath.push(node);
@@ -115,8 +156,8 @@ public:
     Node *getFirstNode();
     void addFirstNode(std::string _name, int _id, Vector2f _iso_pos);
     Node *findNode(int searchId, int debugLevel);
-    ResultSet *runDijkstra(Node *startNode, Node *endNode, int debugLevel);
-    void printPathFromDijkstra(ResultSet *dijkstraResult);
+    DijkstraResult *runDijkstra(Node *startNode, Node *endNode, int debugLevel);
+    void printPathFromDijkstra(DijkstraResult *dijkstraResult);
     void traverseAndReset(Node *curr, BinarySearchTree *visited);
     void resetAllNodes();
 
